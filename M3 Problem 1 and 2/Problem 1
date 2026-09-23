@@ -1,0 +1,156 @@
+package com.mycompany.studentgradeanalyzer;
+
+import java.util.Scanner;
+
+class Student {
+ 
+    private String id;
+    private String fullName;
+    private int[] scores;
+ 
+    private static int studentCount = 0;
+ 
+    public Student(String id, String fullName, int[] scores) {
+        this.id = id;
+        this.fullName = fullName;
+        this.scores = scores;
+        studentCount++;
+    }
+    public String getId() {
+        return id;
+    }
+    public String getFullName() {
+        return fullName;
+    }
+    public int[] getScores() {
+        return scores;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    public void setScores(int[] scores) {
+        this.scores = scores;
+    }
+    public double calculateAverage() {
+        int total = 0;
+ 
+        for (int score : scores) {
+            total += score;
+        }
+        return (double) total / scores.length;
+    }
+    public String getStatus() {
+        if (calculateAverage() >= 75) {
+            return "PASSED";
+        } else {
+            return "FAILED";
+        }
+    }
+    public static int getStudentCount() {
+        return studentCount;
+    }
+}
+ 
+// MAIN CLASS
+public class StudentGradeAnalyzer {
+ 
+    public static void main(String[] args) {
+ 
+        Scanner scanner = new Scanner(System.in);
+        int numberOfStudents;
+        do {
+            System.out.print("Enter number of students (1-10): ");
+            numberOfStudents = scanner.nextInt();
+            scanner.nextLine();
+            if (numberOfStudents < 1 || numberOfStudents > 10) {
+                System.out.println("Invalid. Enter 1 to 10 only.");
+            }
+        } while (numberOfStudents < 1 || numberOfStudents > 10);
+ 
+ 
+        Student[] students = new Student[numberOfStudents];
+ 
+ 
+        for (int i = 0; i < numberOfStudents; i++) {
+ 
+            System.out.println("\nStudent " + (i + 1));
+ 
+            System.out.print("Enter Student ID: ");
+            String id = scanner.nextLine();
+ 
+            System.out.print("Enter Full Name: ");
+            String fullName = scanner.nextLine();
+ 
+            int[] scores = new int[3];
+ 
+            for (int j = 0; j < 3; j++) {
+ 
+                do {
+                    System.out.print("Enter Score " + (j + 1) + ": ");
+                    scores[j] = scanner.nextInt();
+ 
+                    if (scores[j] < 0 || scores[j] > 100) {
+                        System.out.println(
+                            "Invalid score. Enter 0 to 100 only."
+                        );
+                    }
+ 
+                } while (scores[j] < 0 || scores[j] > 100);
+            }
+ 
+            scanner.nextLine();
+ 
+            students[i] = new Student(id, fullName, scores);
+        }
+ 
+ 
+        System.out.println("\n===== STUDENT SUMMARY =====");
+ 
+        for (Student student : students) {
+ 
+            System.out.println("\nID: " + student.getId());
+            System.out.println("Name: " + student.getFullName());
+ 
+            System.out.printf(
+                "Average: %.2f%n",
+                student.calculateAverage()
+            );
+ 
+            System.out.println("Status: " + student.getStatus());
+        }
+ 
+ 
+        Student highestStudent = students[0];
+ 
+        for (int i = 1; i < students.length; i++) {
+ 
+            if (students[i].calculateAverage()
+                    > highestStudent.calculateAverage()) {
+ 
+                highestStudent = students[i];
+            }
+        }
+ 
+ 
+        System.out.println("\n===== HIGHEST AVERAGE =====");
+ 
+        System.out.println(
+            "Student: " + highestStudent.getFullName()
+        );
+ 
+        System.out.printf(
+            "Average: %.2f%n",
+            highestStudent.calculateAverage()
+        );
+ 
+        System.out.println(
+            "\nTotal Student objects created: "
+            + Student.getStudentCount()
+        );
+ 
+        scanner.close();
+    }
+}
