@@ -1,5 +1,3 @@
-package com.mycompany.studentgradeanalyzer;
-
 import java.util.Scanner;
 
 class Student {
